@@ -11,7 +11,7 @@ export class RulesService {
     this.http = http
   }
 
-  fetch() : void {
+  fetch(callBackFunction: (result: string) => void) : void {
     this.http.get('assets/rulebook.txt', {responseType: 'text'})
     .subscribe(data => {
       console.log(data);
