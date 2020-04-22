@@ -14,7 +14,7 @@ export class RulesService {
   fetch(callBackFunction: (result: string) => void) : void {
     this.http.get('assets/rulebook.txt', {responseType: 'text'})
     .subscribe(data => {
-      console.log(data);
+      callBackFunction(data)
     });
   }
 }
