@@ -8,8 +8,10 @@ import { RulesService } from './rules.service';
 })
 export class AppComponent implements OnInit {
   title = 'diehard-card';
+  rules = ""
+
   constructor(rulesService : RulesService) {
-    // do the fetch
+    rulesService.fetch()
   }
 
   ngOnInit(): void {

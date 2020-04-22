@@ -1,0 +1,4 @@
+Single-player Open-face Chinese Poker
+Introduction
+SPOFC is a variation of Open-face Chinese poker (OFC), which evolved from closed-face (“regular”) Chinese poker. It is not necessary to know the rules or strategies of regular Chinese poker or OFC in order to enjoy SPOFC.
+The game is easy to learn and intuitive to play (don’t be scared by the table of bonuses), and like any good poker game, a beginner can win right away!
