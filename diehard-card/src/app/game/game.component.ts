@@ -4,8 +4,7 @@ import { Card } from '../card';
 
 @Component({
   selector: 'app-game',
-  template: `<h1>Welcome</h1>
-  <table>
+  template: `<table>
   <tr>
     <th *ngFor="let card of top">
       <img src={{card.image}} alt={{card.code}} width="75" height="100">
@@ -24,21 +23,28 @@ import { Card } from '../card';
 </table>
 
   <div>
-  <img src={{card.image}} alt={{card.code}}>
-  <button mat-stroked-button color="primary" (click)="placeTop()">Top</button>
-  <button mat-stroked-button color="primary" (click)="placeMiddle()">Middle</button>
-  <button mat-stroked-button color="primary" (click)="placeBottom()">Bottom</button>
+  <img src={{card.image}} alt={{card.code}} width="100" height="125">
+  <button mat-stroked-button color="primary" (click)="placeTop()" [disabled]="topFull">Top</button>
+  <button mat-stroked-button color="primary" (click)="placeMiddle()" [disabled]="middleFull">Middle</button>
+  <button mat-stroked-button color="primary" (click)="placeBottom()" [disabled]="bottomFull">Bottom</button>
   </div>
-  <button mat-raised-button color="primary" (click)="drawCard()">Draw a card</button>`,
+  <button mat-raised-button color="primary" (click)="drawCard()">Start game</button>`,
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit {
+  imageFetched: boolean = false;
+  topFull: boolean = false;
+  middleFull: boolean = false;
+  bottomFull: boolean = false;
+  allFull: boolean = false;
   card: Card;
   top: Card[] = [];
   middle: Card[] = [];
   bottom: Card[] = [];
 
-  constructor(private cardsService : CardsService) { }
+  constructor(private cardsService : CardsService) {
+
+  }
 
   ngOnInit(): void {
     this.cardsService.fetchDeck();
@@ -52,13 +58,25 @@ export class GameComponent implements OnInit {
 
   placeTop() : void {
     this.top.push(this.card)
+    this.drawCard()
+    if (this.top.length === 3) {
+      this.topFull = true
+    }
   }
 
   placeMiddle() : void {
     this.middle.push(this.card)
+    this.drawCard()
+    if (this.middle.length === 5) {
+      this.middleFull = true
+    }
   }
 
   placeBottom() : void {
     this.bottom.push(this.card)
+    this.drawCard()
+    if (this.bottom.length === 5) {
+      this.bottomFull = true
+    }
   }
 }
