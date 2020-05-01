@@ -11,13 +11,13 @@ import { RulesService } from '../rules.service';
   styleUrls: ['./instructions.component.css']
 })
 export class InstructionsComponent implements OnInit {
-  rules = ""
-  constructor(private rulesService : RulesService) { }
+  rules = ''
+  constructor(private rulesService: RulesService) { }
 
   ngOnInit(): void {
     this.rulesService.fetch((result) => {
-      this.rules = result
-    })
+      this.rules = result;
+    });
   }
 
 }

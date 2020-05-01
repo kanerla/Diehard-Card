@@ -41,18 +41,18 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit {
-  gameStarted: boolean = false;
-  imageFetched: boolean = false;
-  topFull: boolean = false;
-  middleFull: boolean = false;
-  bottomFull: boolean = false;
-  allFull: boolean = false;
+  gameStarted = false;
+  imageFetched = false;
+  topFull = false;
+  middleFull = false;
+  bottomFull = false;
+  allFull = false;
   card: Card;
   top: Card[] = [];
   middle: Card[] = [];
   bottom: Card[] = [];
 
-  constructor(private cardsService : CardsService) {
+  constructor(private cardsService: CardsService) {
 
   }
 
@@ -60,82 +60,82 @@ export class GameComponent implements OnInit {
     this.cardsService.fetchDeck();
   }
 
-  drawCard() : void {
+  drawCard(): void {
     this.gameStarted = true;
     this.cardsService.drawCard((result) => {
       this.card = result;
     });
   }
 
-  placeTop() : void {
-    this.top.push(this.card)
-    this.drawCard()
+  placeTop(): void {
+    this.top.push(this.card);
+    this.drawCard();
     if (this.top.length === 3) {
-      this.topFull = true
+      this.topFull = true;
     }
-    console.log(this.gameOver())
+    console.log(this.gameOver());
   }
 
-  placeMiddle() : void {
-    this.middle.push(this.card)
-    this.drawCard()
+  placeMiddle(): void {
+    this.middle.push(this.card);
+    this.drawCard();
     if (this.middle.length === 5) {
-      this.middleFull = true
+      this.middleFull = true;
     }
-    console.log(this.gameOver())
+    console.log(this.gameOver());
   }
 
-  placeBottom() : void {
-    this.bottom.push(this.card)
-    this.drawCard()
+  placeBottom(): void {
+    this.bottom.push(this.card);
+    this.drawCard();
     if (this.bottom.length === 5) {
-      this.bottomFull = true
+      this.bottomFull = true;
     }
-    console.log(this.gameOver())
+    console.log(this.gameOver());
   }
 
-  gameOver() : boolean {
+  gameOver(): boolean {
     if (this.bottomFull && this.topFull && this.middleFull) {
-      console.log("Game over!");
-      console.log('top:')
-      console.log(this.checkForFlush(this.top))
-      console.log('middle:')
-      console.log(this.checkForFlush(this.middle))
-      console.log('bottom:')
-      console.log(this.checkForFlush(this.bottom))
+      console.log('Game over!');
+      console.log('top:');
+      console.log(this.checkForFlush(this.top));
+      console.log('middle:');
+      console.log(this.checkForFlush(this.middle));
+      console.log('bottom:');
+      console.log(this.checkForFlush(this.bottom));
       return true;
     } else {
       return false;
     }
   }
 
-  allEqual(arr : string[]) : boolean {
-    return arr.every(x => x === arr[0])
+  allEqual(arr: string[]): boolean {
+    return arr.every(x => x === arr[0]);
   }
 
-  checkForFlush(row : Card[]) : boolean {
-    let suits = [];
-    for (let i=0; i<row.length; i++) {
-        suits.push(row[i].suit)
+  checkForFlush(row: Card[]): boolean {
+    const suits = [];
+    for (let i = 0; i < row.length; i++) {
+        suits.push(row[i].suit);
     }
     return this.allEqual( suits );
   }
 
-  checkForStraight(row : Card[]) : boolean {
-    let sorted = this.sortValues(row)
+  checkForStraight(row: Card[]): boolean {
+    const sorted = this.sortValues(row);
     if (sorted[sorted.length - 1] === 14 && sorted[0] === 2 && sorted[1] === 3 && sorted[2] === 4 && sorted[3] === 5) {
-      return true
+      return true;
     }
     for (let i = 0; i < sorted.length - 1; i++) {
       if (sorted[i + 1] !== sorted[i] + 1) {
-        return false
+        return false;
       }
     }
-    return true
+    return true;
   }
 
-  checkForThreeOfKind(row : Card[]) : boolean {
-    let sorted = this.sortValues(row)
+  checkForThreeOfKind(row: Card[]): boolean {
+    const sorted = this.sortValues(row);
     let current = null;
     let count = 0;
 
@@ -155,42 +155,42 @@ export class GameComponent implements OnInit {
         console.log(current + ' comes --> ' + count + ' times');
         return true;
     }
-    return false
+    return false;
   }
 
-  checkForPairs(row : Card[]) : void {
-    let sorted = this.sortValues(row)
+  checkForPairs(row: Card[]): void {
+    const sorted = this.sortValues(row);
 
-    let pairs = [];
+    const pairs = [];
     for (let i = 0; i < sorted.length - 1; i++) {
       if (sorted[i + 1] === sorted[i]) {
         pairs.push(sorted[i]);
       }
     }
-    for (let num of pairs) {
+    for (const num of pairs) {
       console.log(num);
     }
-    console.log(pairs.length + " pairs")
+    console.log(pairs.length + ' pairs');
   }
 
-  sortValues(row : Card[]) : number[] {
-    let values = [];
-    for (let i=0; i<row.length; i++) {
-      if (row[i].value === "JACK") {
-        values.push(11)
-      } else if (row[i].value === "QUEEN") {
-        values.push(12)
-      } else if (row[i].value === "KING") {
-        values.push(13)
-      } else if (row[i].value === "ACE") {
-        values.push(14)
+  sortValues(row: Card[]): number[] {
+    const values = [];
+    for (let i = 0; i < row.length; i++) {
+      if (row[i].value === 'JACK') {
+        values.push(11);
+      } else if (row[i].value === 'QUEEN') {
+        values.push(12);
+      } else if (row[i].value === 'KING') {
+        values.push(13);
+      } else if (row[i].value === 'ACE') {
+        values.push(14);
       } else {
-        values.push(Number(row[i].value))
+        values.push(Number(row[i].value));
       }
     }
 
-    let sorted = values.sort((n1, n2) => n1 - n2);
+    const sorted = values.sort((n1, n2) => n1 - n2);
 
-    return sorted
+    return sorted;
   }
 }
