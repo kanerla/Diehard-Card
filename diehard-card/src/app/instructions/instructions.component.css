@@ -3,3 +3,16 @@ div {
     margin-right: auto;
     margin-left: auto;
 }
+
+button {
+    float: left;
+    left: 25%;
+    margin: 120px 50px;
+    position:relative;
+    top:50%;
+    width: 20%;
+}
+
+img {
+    float: left;
+}

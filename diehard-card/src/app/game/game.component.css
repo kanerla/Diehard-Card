@@ -3,6 +3,10 @@ table {
     margin-left: auto;
 }
 
+tr {
+    height: 110px;
+}
+
 .bottom {
     position: fixed;
     bottom: 0;
