@@ -6,18 +6,21 @@ import { Card } from '../card';
   selector: 'app-game',
   template: `<table>
   <tr>
+    <p *ngIf="gameStarted">TOP</p>
     <th *ngFor="let card of top">
-      <img src={{card.image}} alt={{card.code}} width="75" height="100">
+      <img src={{card.image}} alt={{card.code}} width="75" height="105">
     </th>
   </tr>
   <tr>
+  <p *ngIf="gameStarted">MIDDLE</p>
     <th *ngFor="let card of middle">
-      <img src={{card.image}} alt={{card.code}} width="75" height="100">
+      <img src={{card.image}} alt={{card.code}} width="75" height="105">
     </th>
   </tr>
   <tr>
+  <p *ngIf="gameStarted">BOTTOM</p>
     <th *ngFor="let card of bottom">
-      <img src={{card.image}} alt={{card.code}} width="75" height="100">
+      <img src={{card.image}} alt={{card.code}} width="75" height="105">
     </th>
   </tr>
 </table>
@@ -26,9 +29,9 @@ import { Card } from '../card';
   <button class="button" mat-raised-button color="primary" (click)="drawCard()" [disabled]="gameStarted">Start game</button>
 </div>
 
-<div class="bottom">
+<div class="bottom" *ngIf="gameStarted">
   <div>
-    <img src={{card.image}} alt={{card.code}} width="100" height="125">
+    <img src={{card.image}} alt={{card.code}} width="95" height="125">
   </div>
   <button mat-stroked-button color="primary" (click)="placeTop()" [disabled]="topFull">Top</button>
   <button mat-stroked-button color="primary" (click)="placeMiddle()" [disabled]="middleFull">Middle</button>
@@ -57,10 +60,10 @@ export class GameComponent implements OnInit {
   }
 
   drawCard() : void {
+    this.gameStarted = true;
     this.cardsService.drawCard((result) => {
       this.card = result;
     });
-    this.gameStarted = true;
   }
 
   placeTop() : void {
