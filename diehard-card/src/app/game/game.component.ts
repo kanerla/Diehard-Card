@@ -98,11 +98,11 @@ export class GameComponent implements OnInit {
     if (this.bottomFull && this.topFull && this.middleFull) {
       console.log('Game over!');
       console.log('top:');
-      console.log(this.checkForFlush(this.top));
+      console.log(this.checkForPairs(this.top));
       console.log('middle:');
-      console.log(this.checkForFlush(this.middle));
+      console.log(this.checkForPairs(this.middle));
       console.log('bottom:');
-      console.log(this.checkForFlush(this.bottom));
+      console.log(this.checkForPairs(this.bottom));
       return true;
     } else {
       return false;
@@ -121,6 +121,14 @@ export class GameComponent implements OnInit {
     return this.allEqual( suits );
   }
 
+  checkForRoyal(row: Card[]): boolean {
+    const sorted = this.sortValues(row);
+    if (sorted[0] === 10 && sorted[1] === 11 && sorted[2] === 12 && sorted[3] === 13 && sorted[4] === 14) {
+      return true;
+    }
+    return false;
+  }
+
   checkForStraight(row: Card[]): boolean {
     const sorted = this.sortValues(row);
     if (sorted[sorted.length - 1] === 14 && sorted[0] === 2 && sorted[1] === 3 && sorted[2] === 4 && sorted[3] === 5) {
@@ -134,6 +142,7 @@ export class GameComponent implements OnInit {
     return true;
   }
 
+  // and 4 of a kind
   checkForThreeOfKind(row: Card[]): boolean {
     const sorted = this.sortValues(row);
     let current = null;
@@ -141,7 +150,7 @@ export class GameComponent implements OnInit {
 
     for (let i = 0; i < sorted.length; i++) {
       if (sorted[i] != current) {
-          if (count === 3) {
+          if (count === 3 || count === 4) {
               console.log(current + ' comes --> ' + count + ' times');
               return true;
           }
@@ -151,13 +160,17 @@ export class GameComponent implements OnInit {
           count++;
       }
     }
-    if (count === 3) {
+    // useless?
+    if (count === 3 || count === 4) {
         console.log(current + ' comes --> ' + count + ' times');
         return true;
     }
     return false;
   }
 
+  // counts 4 of a kind as 3 pairs
+  // probably counts 3 of a kind as 2 pairs
+  // does not count 2 pairs (only acknowledges the first one)
   checkForPairs(row: Card[]): void {
     const sorted = this.sortValues(row);
 
