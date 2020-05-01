@@ -5,11 +5,13 @@ import { CardsService } from './cards.service';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes, Router } from '@angular/router';
 import { GameComponent } from './game/game.component';
 import { InstructionsComponent } from './instructions/instructions.component';
 import { HeaderComponent } from './header/header.component';
+import { StatusDialogComponent } from './status-dialog/status-dialog.component';
 
 const appRoutes: Routes = [
   { path: 'play', component: GameComponent },
@@ -21,12 +23,17 @@ const appRoutes: Routes = [
     AppComponent,
     GameComponent,
     InstructionsComponent,
-    HeaderComponent
+    HeaderComponent,
+    StatusDialogComponent
+  ],
+  entryComponents: [
+    StatusDialogComponent
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     MatButtonModule,
+    MatDialogModule,
     BrowserAnimationsModule,
     RouterModule.forRoot(appRoutes, { enableTracing: true })
   ],
