@@ -22,16 +22,22 @@ import { Card } from '../card';
   </tr>
 </table>
 
+<div class="start">
+  <button class="button" mat-raised-button color="primary" (click)="drawCard()" [disabled]="gameStarted">Start game</button>
+</div>
+
+<div class="bottom">
   <div>
-  <img src={{card.image}} alt={{card.code}} width="100" height="125">
+    <img src={{card.image}} alt={{card.code}} width="100" height="125">
+  </div>
   <button mat-stroked-button color="primary" (click)="placeTop()" [disabled]="topFull">Top</button>
   <button mat-stroked-button color="primary" (click)="placeMiddle()" [disabled]="middleFull">Middle</button>
   <button mat-stroked-button color="primary" (click)="placeBottom()" [disabled]="bottomFull">Bottom</button>
-  </div>
-  <button mat-raised-button color="primary" (click)="drawCard()">Start game</button>`,
+</div>`,
   styleUrls: ['./game.component.css']
 })
 export class GameComponent implements OnInit {
+  gameStarted: boolean = false;
   imageFetched: boolean = false;
   topFull: boolean = false;
   middleFull: boolean = false;
@@ -54,6 +60,7 @@ export class GameComponent implements OnInit {
     this.cardsService.drawCard((result) => {
       this.card = result;
     });
+    this.gameStarted = true;
   }
 
   placeTop() : void {
