@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, Routes, Router } from '@angular/router';
 import { GameComponent } from './game/game.component';
 import { InstructionsComponent } from './instructions/instructions.component';
+import { HeaderComponent } from './header/header.component';
 
 const appRoutes: Routes = [
   { path: 'play', component: GameComponent },
@@ -19,7 +20,8 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     GameComponent,
-    InstructionsComponent
+    InstructionsComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
