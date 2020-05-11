@@ -27,7 +27,7 @@ import { MatDialog } from '@angular/material/dialog';
 </table>
 
 <div class="start">
-  <button class="button" mat-raised-button color="primary" (click)="drawCard()" [disabled]="gameStarted">Start game</button>
+  <button class="button" mat-raised-button color="primary" (click)="drawCards()" [disabled]="gameStarted">Start game</button>
 </div>
 
 <div class="bottom" *ngIf="gameStarted">
@@ -48,12 +48,14 @@ export class GameComponent implements OnInit {
   bottomFull = false;
   allFull = false;
   card: Card;
+  cards: Card[] = [];
   top: Card[] = [];
   middle: Card[] = [];
   bottom: Card[] = [];
+  index;
 
   constructor(private cardsService: CardsService) {
-
+    this.index = 0;
   }
 
   ngOnInit(): void {
@@ -61,10 +63,22 @@ export class GameComponent implements OnInit {
   }
 
   drawCard(): void {
-    this.gameStarted = true;
-    this.cardsService.drawCard((result) => {
-      this.card = result;
+    /*
+    this.card = this.cards[this.index];
+    this.index ++;
+    */
+   this.cardsService.drawCard((result) => {
+     this.card = result;
+   })
+   this.gameStarted = true;
+  }
+
+  drawCards(): void {
+    this.cardsService.drawCards((result) => {
+      this.cards = result;
     });
+    this.gameStarted = true;
+    this.drawCard();
   }
 
   placeTop(): void {
@@ -99,8 +113,34 @@ export class GameComponent implements OnInit {
       console.log('Game over!');
       console.log('top:');
       console.log(this.checkForPairs(this.top));
+
       console.log('middle:');
-      console.log(this.checkForPairs(this.middle));
+      if (this.checkForFlush(this.middle)) {
+        if (this.checkForStraight(this.middle)) {
+          if (this.checkForRoyal(this.middle)) {
+            console.log('Royal Flush');
+          } else {
+            console.log('Straight Flush');
+          }
+        } else {
+          console.log('Flush');
+        }
+      } else {
+        if (this.checkForStraight(this.middle)) {
+          console.log('Straight');
+        } else {
+          if (this.checkForFourOfKind(this.middle)) {
+            console.log('Four of a kind');
+          } else {
+            if (this.checkForThreeOfKind(this.middle)) {
+              console.log('Three of a kind or Full House');
+            } else {
+              console.log('(2) pair(s) or a high card');
+            }
+          }
+        }
+      }
+
       console.log('bottom:');
       console.log(this.checkForPairs(this.bottom));
       return true;
@@ -142,7 +182,6 @@ export class GameComponent implements OnInit {
     return true;
   }
 
-  // and 4 of a kind
   checkForThreeOfKind(row: Card[]): boolean {
     const sorted = this.sortValues(row);
     let current = null;
@@ -150,7 +189,7 @@ export class GameComponent implements OnInit {
 
     for (let i = 0; i < sorted.length; i++) {
       if (sorted[i] != current) {
-          if (count === 3 || count === 4) {
+          if (count === 3) {
               console.log(current + ' comes --> ' + count + ' times');
               return true;
           }
@@ -161,7 +200,32 @@ export class GameComponent implements OnInit {
       }
     }
     // useless?
-    if (count === 3 || count === 4) {
+    if (count === 3) {
+        console.log(current + ' comes --> ' + count + ' times');
+        return true;
+    }
+    return false;
+  }
+
+  checkForFourOfKind(row: Card[]): boolean {
+    const sorted = this.sortValues(row);
+    let current = null;
+    let count = 0;
+
+    for (let i = 0; i < sorted.length; i++) {
+      if (sorted[i] != current) {
+          if (count === 4) {
+              console.log(current + ' comes --> ' + count + ' times');
+              return true;
+          }
+          current = sorted[i];
+          count = 1;
+      } else {
+          count++;
+      }
+    }
+    // useless?
+    if (count === 4) {
         console.log(current + ' comes --> ' + count + ' times');
         return true;
     }

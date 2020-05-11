@@ -10,6 +10,7 @@ export class CardsService {
   private http: HttpClient;
   private deckId = '';
   private card: Card;
+  private cards: Card[] = [];
   private baseUrl = 'https://deckofcardsapi.com/api/deck/';
   headers;
   private proxyurl = 'https://cors-anywhere.herokuapp.com/';
@@ -46,5 +47,21 @@ export class CardsService {
       console.log(this.card.code);
       callBackFunction(this.card);
     });
+  }
+
+  drawCards(callBackFunction: (result: Card[]) => void): void {
+    this.http.get(this.proxyurl + this.baseUrl + this.deckId + '/draw/?count=13', { headers: this.headers}).subscribe(json => {
+      for (const key in json) {
+        if (key === 'cards') {
+          this.cards = json[key];
+        }
+      }
+    });
+
+    this.cards.forEach( (card) => {
+      console.log(card.code);
+    });
+
+    callBackFunction(this.cards);
   }
 }
