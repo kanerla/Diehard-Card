@@ -18,7 +18,11 @@ tr {
     text-align: center;
 }
 
-.button {
+.startbutton {
     position: absolute;
     top: 50%;
+}
+
+.backbutton {
+    left: 2%;
 }
