@@ -23,8 +23,4 @@
 <h2>Scoring</h2>
 <p>Scoring of the final hand (after all 13 cards are placed) is done on a point basis.
     Each row, (top, middle, and bottom), is worth one point.</p>
-<p>To encourage players to take chances for big hands, SPOFC rewards good hands in every row with different point bonuses. These bonuses are given as long as a player makes a qualifying hand.</p>
-<p>Bonuses for bottom-row hands range from +2 for a straight to +25 for a royal flush.
-    Middle bonuses start with +2 for three-of-a-kind, going up to +50 for a royal flush.
-    Bonuses for the top hand start with +1 for a pair of sixes and then increase from there.
-    The full list is below.</p>
+<p>To encourage players to take chances for big hands, SPOFC rewards good hands in middle and bottom rows with different point bonuses. These bonuses are given as long as a player makes a qualifying hand.</p>
