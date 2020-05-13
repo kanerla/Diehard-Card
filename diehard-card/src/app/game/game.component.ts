@@ -3,11 +3,12 @@ import { CardsService } from '../cards.service';
 import { Card } from '../card';
 import { MatDialog } from '@angular/material/dialog';
 import { StatusDialogComponent } from '../status-dialog/status-dialog.component';
-import { threadId } from 'worker_threads';
 
 @Component({
   selector: 'app-game',
-  template: `<table>
+  template: `
+  <a routerLink="/" routerLinkActive="active"><button class="backbutton" mat-raised-button color="primary">Back</button></a>
+  <table>
   <tr>
     <p *ngIf="gameStarted">TOP</p>
     <th *ngFor="let card of top">
@@ -29,7 +30,7 @@ import { threadId } from 'worker_threads';
 </table>
 
 <div class="start">
-  <button class="button" mat-raised-button color="primary" (click)="drawCards()" [disabled]="gameStarted">{{buttonText}}</button>
+  <button class="startbutton" mat-raised-button color="primary" (click)="drawCards()" [disabled]="gameStarted">{{buttonText}}</button>
 </div>
 
 <div class="bottom" *ngIf="gameStarted">
@@ -45,7 +46,7 @@ import { threadId } from 'worker_threads';
 export class GameComponent implements OnInit {
   gameStarted = false;
   imageFetched = false;
-  buttonText = 'Start game'
+  buttonText = 'Start game';
   topFull = false;
   middleFull = false;
   bottomFull = false;
@@ -56,6 +57,7 @@ export class GameComponent implements OnInit {
   middle: Card[] = [];
   bottom: Card[] = [];
   index;
+  highscores: number[] = [];
 
   constructor(private cardsService: CardsService, public dialog: MatDialog) {
     this.index = 0;
@@ -70,13 +72,20 @@ export class GameComponent implements OnInit {
     this.card = this.cards[this.index];
     this.index ++;
     */
-   this.cardsService.drawCard((result) => {
+    this.cardsService.drawCard((result) => {
      this.card = result;
-   })
-   this.gameStarted = true;
+    });
+    this.gameStarted = true;
   }
 
   drawCards(): void {
+    this.top = [];
+    this.middle = [];
+    this.bottom = [];
+    this.topFull = false;
+    this.middleFull = false;
+    this.bottomFull = false;
+    this.allFull = false;
     this.cardsService.drawCards((result) => {
       this.cards = result;
     });
@@ -114,7 +123,7 @@ export class GameComponent implements OnInit {
   gameOver(): boolean {
     if (this.bottomFull && this.topFull && this.middleFull) {
       console.log('Game over!');
-      this.compareHands(this.getHand(this.top), this.getHand(this.middle), this.getHand(this.bottom));
+      this.compareHands(this.getTopHand(this.top), this.getHand(this.middle), this.getHand(this.bottom));
       /*
       console.log('top:');
       this.getHand(this.top);
@@ -309,6 +318,21 @@ export class GameComponent implements OnInit {
     }
   }
 
+  getTopHand(row: Card[]): number {
+    if (this.checkForThreeOfKind(row)) {
+      console.log('Three of a kind');
+      return 3;
+    } else {
+      if (this.checkForPairs(row) === 1) {
+        console.log('A pair');
+        return 1;
+      } else {
+        console.log('High Card');
+        return 0;
+      }
+    }
+  }
+
   compareHands(top: number, middle: number, bottom: number): void {
     let score = 0;
     if (top > middle || top > bottom || middle > bottom) {
@@ -381,23 +405,25 @@ export class GameComponent implements OnInit {
         }
       }
 
+      this.highscores.push(score);
+      console.log(this.highscores.length);
       console.log('WON');
       this.openDialog(true, score);
     }
   }
 
   openDialog(won, score): void {
+    const sorted = this.highscores.sort((n1, n2) => n2 - n1);
     const dialogRef = this.dialog.open(StatusDialogComponent, {
       height: '225px',
       width: '250px',
-      data: {status: won, points: score}
+      data: {status: won, points: score, list: sorted}
     });
     dialogRef.afterClosed().subscribe(() => {
-      /*
       this.gameStarted = false;
       this.buttonText = 'Play again';
-      */
-     location.reload();
+     // location.reload();
+      this.cardsService.shuffleDeck();
     });
   }
 }

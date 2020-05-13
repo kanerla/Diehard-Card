@@ -64,4 +64,10 @@ export class CardsService {
 
     callBackFunction(this.cards);
   }
+
+  shuffleDeck(): void {
+    this.http.get(this.proxyurl + this.baseUrl + this.deckId + '/shuffle/', { headers: this.headers}).subscribe(json => {
+      console.log(json);
+    });
+  }
 }
