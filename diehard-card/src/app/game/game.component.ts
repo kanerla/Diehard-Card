@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CardsService } from '../cards.service';
 import { Card } from '../card';
 import { MatDialog } from '@angular/material/dialog';
+import { StatusDialogComponent } from '../status-dialog/status-dialog.component';
+import { threadId } from 'worker_threads';
 
 @Component({
   selector: 'app-game',
@@ -27,7 +29,7 @@ import { MatDialog } from '@angular/material/dialog';
 </table>
 
 <div class="start">
-  <button class="button" mat-raised-button color="primary" (click)="drawCards()" [disabled]="gameStarted">Start game</button>
+  <button class="button" mat-raised-button color="primary" (click)="drawCards()" [disabled]="gameStarted">{{buttonText}}</button>
 </div>
 
 <div class="bottom" *ngIf="gameStarted">
@@ -43,6 +45,7 @@ import { MatDialog } from '@angular/material/dialog';
 export class GameComponent implements OnInit {
   gameStarted = false;
   imageFetched = false;
+  buttonText = 'Start game'
   topFull = false;
   middleFull = false;
   bottomFull = false;
@@ -54,7 +57,7 @@ export class GameComponent implements OnInit {
   bottom: Card[] = [];
   index;
 
-  constructor(private cardsService: CardsService) {
+  constructor(private cardsService: CardsService, public dialog: MatDialog) {
     this.index = 0;
   }
 
@@ -307,10 +310,94 @@ export class GameComponent implements OnInit {
   }
 
   compareHands(top: number, middle: number, bottom: number): void {
+    let score = 0;
     if (top > middle || top > bottom || middle > bottom) {
       console.log('LOST');
+      this.openDialog(false, score);
     } else {
+      score = 3;
+
+      switch (bottom) {
+        case 4: {
+          score += 2;
+          break;
+        }
+        case 5: {
+          score += 4;
+          break;
+        }
+        case 6: {
+          score += 6;
+          break;
+        }
+        case 7: {
+          score += 10;
+          break;
+        }
+        case 8: {
+          score += 15;
+          break;
+        }
+        case 9: {
+          score += 25;
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+
+      switch (middle) {
+        case 3: {
+          score += 2;
+          break;
+        }
+        case 4: {
+          score += 4;
+          break;
+        }
+        case 5: {
+          score += 8;
+          break;
+        }
+        case 6: {
+          score += 12;
+          break;
+        }
+        case 7: {
+          score += 20;
+          break;
+        }
+        case 8: {
+          score += 30;
+          break;
+        }
+        case 9: {
+          score += 50;
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+
       console.log('WON');
+      this.openDialog(true, score);
     }
+  }
+
+  openDialog(won, score): void {
+    const dialogRef = this.dialog.open(StatusDialogComponent, {
+      height: '225px',
+      width: '250px',
+      data: {status: won, points: score}
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      /*
+      this.gameStarted = false;
+      this.buttonText = 'Play again';
+      */
+     location.reload();
+    });
   }
 }
