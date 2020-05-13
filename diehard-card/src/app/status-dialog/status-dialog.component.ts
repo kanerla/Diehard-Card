@@ -7,6 +7,11 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
   <div mat-dialog-content>
     <p>Score: {{data.points}}</p>
   </div>
+  <div mat-dialog-content>
+    <ol>
+      <li *ngFor="let num of data.list">{{num}}</li>
+    </ol>
+  </div>
   <div mat-dialog-actions>
     <button mat-button [mat-dialog-close]="" cdkFocusInitial>Ok</button>
   </div>`,
@@ -14,7 +19,7 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class StatusDialogComponent implements OnInit {
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: boolean) { }
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
   }
