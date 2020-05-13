@@ -111,38 +111,17 @@ export class GameComponent implements OnInit {
   gameOver(): boolean {
     if (this.bottomFull && this.topFull && this.middleFull) {
       console.log('Game over!');
+      this.compareHands(this.getHand(this.top), this.getHand(this.middle), this.getHand(this.bottom));
+      /*
       console.log('top:');
-      console.log(this.checkForPairs(this.top));
+      this.getHand(this.top);
 
       console.log('middle:');
-      if (this.checkForFlush(this.middle)) {
-        if (this.checkForStraight(this.middle)) {
-          if (this.checkForRoyal(this.middle)) {
-            console.log('Royal Flush');
-          } else {
-            console.log('Straight Flush');
-          }
-        } else {
-          console.log('Flush');
-        }
-      } else {
-        if (this.checkForStraight(this.middle)) {
-          console.log('Straight');
-        } else {
-          if (this.checkForFourOfKind(this.middle)) {
-            console.log('Four of a kind');
-          } else {
-            if (this.checkForThreeOfKind(this.middle)) {
-              console.log('Three of a kind or Full House');
-            } else {
-              console.log('(2) pair(s) or a high card');
-            }
-          }
-        }
-      }
+      this.getHand(this.middle);
 
       console.log('bottom:');
-      console.log(this.checkForPairs(this.bottom));
+      this.getHand(this.bottom);
+      */
       return true;
     } else {
       return false;
@@ -188,7 +167,7 @@ export class GameComponent implements OnInit {
     let count = 0;
 
     for (let i = 0; i < sorted.length; i++) {
-      if (sorted[i] != current) {
+      if (sorted[i] !== current) {
           if (count === 3) {
               console.log(current + ' comes --> ' + count + ' times');
               return true;
@@ -213,7 +192,7 @@ export class GameComponent implements OnInit {
     let count = 0;
 
     for (let i = 0; i < sorted.length; i++) {
-      if (sorted[i] != current) {
+      if (sorted[i] !== current) {
           if (count === 4) {
               console.log(current + ' comes --> ' + count + ' times');
               return true;
@@ -232,22 +211,30 @@ export class GameComponent implements OnInit {
     return false;
   }
 
-  // counts 4 of a kind as 3 pairs
-  // probably counts 3 of a kind as 2 pairs
-  // does not count 2 pairs (only acknowledges the first one)
-  checkForPairs(row: Card[]): void {
+  checkForPairs(row: Card[]): number {
     const sorted = this.sortValues(row);
+    let current = null;
+    let count = 0;
+    let pairs = 0;
 
-    const pairs = [];
-    for (let i = 0; i < sorted.length - 1; i++) {
-      if (sorted[i + 1] === sorted[i]) {
-        pairs.push(sorted[i]);
+    for (let i = 0; i < sorted.length; i++) {
+      if (sorted[i] !== current) {
+          if (count === 2) {
+              pairs ++;
+              count = 0;
+          }
+          current = sorted[i];
+          count = 1;
+      } else {
+          count++;
       }
     }
-    for (const num of pairs) {
-      console.log(num);
+    if (count === 2) {
+      pairs ++;
+      count = 0;
     }
-    console.log(pairs.length + ' pairs');
+
+    return pairs;
   }
 
   sortValues(row: Card[]): number[] {
@@ -269,5 +256,61 @@ export class GameComponent implements OnInit {
     const sorted = values.sort((n1, n2) => n1 - n2);
 
     return sorted;
+  }
+
+  getHand(row: Card[]): number {
+    if (this.checkForFlush(row)) {
+      if (this.checkForStraight(row)) {
+        if (this.checkForRoyal(row)) {
+          console.log('Royal Flush');
+          return 9;
+        } else {
+          console.log('Straight Flush');
+          return 8;
+        }
+      } else {
+        console.log('Flush');
+        return 5;
+      }
+    } else {
+      if (this.checkForStraight(row)) {
+        console.log('Straight');
+        return 4;
+      } else {
+        if (this.checkForFourOfKind(row)) {
+          console.log('Four of a kind');
+          return 7;
+        } else {
+          if (this.checkForThreeOfKind(row)) {
+            if (this.checkForPairs(row) === 1) {
+              console.log('Full House');
+              return 6;
+            } else {
+              console.log('Three of a kind');
+              return 3;
+            }
+          } else {
+            if (this.checkForPairs(row) === 2) {
+              console.log('Two Pairs');
+              return 2;
+            } else if (this.checkForPairs(row) === 1) {
+              console.log('A pair');
+              return 1;
+            } else {
+              console.log('High Card');
+              return 0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  compareHands(top: number, middle: number, bottom: number): void {
+    if (top > middle || top > bottom || middle > bottom) {
+      console.log('LOST');
+    } else {
+      console.log('WON');
+    }
   }
 }
