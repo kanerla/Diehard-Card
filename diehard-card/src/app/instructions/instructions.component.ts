@@ -4,7 +4,7 @@ import { RulesService } from '../rules.service';
 @Component({
   selector: 'app-instructions',
   template: `<div [innerHTML]="rules"></div>
-  <div>
+  <div class="elements">
   <img src="assets/scoreboard.JPG" alt="Scoreboard"/>
   <a routerLink="/play" routerLinkActive="active"><button mat-raised-button color="primary">Play</button></a>
   </div>`,
