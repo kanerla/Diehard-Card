@@ -35,7 +35,7 @@ import { StatusDialogComponent } from '../status-dialog/status-dialog.component'
 
 <div class="bottom" *ngIf="gameStarted">
   <div>
-    <img src={{card.image}} alt={{card.code}} width="95" height="125">
+    <img src={{card.image}} *ngIf="card" alt={{card.code}} onerror="this.src='assets/card.png'" width="95" height="125">
   </div>
   <button mat-stroked-button color="primary" (click)="placeTop()" [disabled]="topFull">Top</button>
   <button mat-stroked-button color="primary" (click)="placeMiddle()" [disabled]="middleFull">Middle</button>
@@ -94,30 +94,36 @@ export class GameComponent implements OnInit {
   }
 
   placeTop(): void {
-    this.top.push(this.card);
-    this.drawCard();
-    if (this.top.length === 3) {
-      this.topFull = true;
+    if (this.notDouble(this.card)) {
+      this.top.push(this.card);
+      this.drawCard();
+      if (this.top.length === 3) {
+        this.topFull = true;
+      }
+      console.log(this.gameOver());
     }
-    console.log(this.gameOver());
   }
 
   placeMiddle(): void {
-    this.middle.push(this.card);
-    this.drawCard();
-    if (this.middle.length === 5) {
-      this.middleFull = true;
+    if (this.notDouble(this.card)) {
+      this.middle.push(this.card);
+      this.drawCard();
+      if (this.middle.length === 5) {
+        this.middleFull = true;
+      }
+      console.log(this.gameOver());
     }
-    console.log(this.gameOver());
   }
 
   placeBottom(): void {
-    this.bottom.push(this.card);
-    this.drawCard();
-    if (this.bottom.length === 5) {
-      this.bottomFull = true;
+    if (this.notDouble(this.card)) {
+      this.bottom.push(this.card);
+      this.drawCard();
+      if (this.bottom.length === 5) {
+        this.bottomFull = true;
+      }
+      console.log(this.gameOver());
     }
-    console.log(this.gameOver());
   }
 
   gameOver(): boolean {
@@ -415,7 +421,7 @@ export class GameComponent implements OnInit {
   openDialog(won, score): void {
     const sorted = this.highscores.sort((n1, n2) => n2 - n1);
     const dialogRef = this.dialog.open(StatusDialogComponent, {
-      height: '225px',
+      height: '275px',
       width: '250px',
       data: {status: won, points: score, list: sorted}
     });
@@ -425,5 +431,16 @@ export class GameComponent implements OnInit {
      // location.reload();
       this.cardsService.shuffleDeck();
     });
+  }
+
+  notDouble(card): boolean {
+    if (this.top.includes(card)) {
+      return false;
+    } else if (this.middle.includes(card)) {
+      return false;
+    } else if (this.bottom.includes(card)) {
+      return false;
+    }
+    return true;
   }
 }
