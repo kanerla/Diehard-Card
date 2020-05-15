@@ -1,15 +1,15 @@
 <h2>Introduction</h2>
-<p>SPOFC is a variation of Open-face Chinese poker (OFC), which evolved from closed-face (“regular”) Chinese poker.
-    It is not necessary to know the rules or strategies of regular Chinese poker or OFC in order to enjoy SPOFC.</p>
-<p>The game is easy to learn and intuitive to play (don’t be scared by the table of bonuses), and like any good poker game, a beginner can win right away!</p>
+<p>SSPOFC is a variation of Open-face Chinese poker (OFC), which evolved from closed-face (“regular”) Chinese poker.
+    It is not necessary to know the rules or strategies of regular Chinese poker or OFC in order to enjoy SSPOFC.</p>
+<p>The game is easy to learn and intuitive to play, and like any good poker game, a beginner can win right away!</p>
 <br />
-<p>Player draws cards from a single deck, trying to make the best possible poker hand. The game is scored in points.</p>
-<p>After all card-placement rounds are complete, player has arranged 13 cards into three hands, called the “top,” the “middle,” and the “bottom.”</p>
+<p>Player draws cards one by one from a single deck, trying to make the best possible poker hand.
+	After all card-placement rounds are complete, player has arranged 13 cards into three hands, called the “top,” the “middle,” and the “bottom.”</p>
 <p>The three hands are scored and compared as regular poker hands. The bottom and middle are regular five-card hands.
-    The top only contains three cards, but is scored the same way, thus the best possible hand on top would be three-of-a-kind, while most top hands are high-card hands.</p>
+    The top only contains three cards, but is scored the same way, thus the best possible hand on top would be three-of-a-kind.</p>
 
 <h2>Objective</h2>
-<p>The first objective of OFC is to make a “qualifying” hand.
+<p>The first objective of SSPOFC is to make a “qualifying” hand.
     There is a strict rule that the bottom hand must be at least as good as the middle hand, and that the middle hand must be at least as good as the top hand.
     Since a player is arranging his cards one at a time, this isn’t always possible.
     If you can’t make a qualifying hand, the entire hand is “foul” and your top, middle and bottom are all marked as zero.</p>
@@ -23,4 +23,5 @@
 <h2>Scoring</h2>
 <p>Scoring of the final hand (after all 13 cards are placed) is done on a point basis.
     Each row, (top, middle, and bottom), is worth one point.</p>
-<p>To encourage players to take chances for big hands, SPOFC rewards good hands in middle and bottom rows with different point bonuses. These bonuses are given as long as a player makes a qualifying hand.</p>
+<p>To encourage players to take chances for big hands, SSPOFC rewards good hands in middle and bottom rows with different point bonuses.
+	These bonuses are given as long as a player makes a qualifying hand.</p>

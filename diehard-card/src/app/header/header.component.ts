@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  title = 'Single-player Open-face Chinese Poker';
+  title = 'Simplified Single-player Open-face Chinese Poker';
 
   constructor() { }
 
