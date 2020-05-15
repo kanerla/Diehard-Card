@@ -1,11 +1,13 @@
 //Install express server
 const express = require('express');
 const path = require('path');
- 
+const cors = require('cors')
 const app = express();
  
 // Serve only the static files form the angularapp directory
 app.use(express.static(__dirname + '/angularapp'));
+
+app.use(cors())
  
 app.get('/*', function(req,res) {
  

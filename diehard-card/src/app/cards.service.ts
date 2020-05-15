@@ -36,7 +36,7 @@ export class CardsService {
   }
 
   drawCard(callBackFunction: (result: Card) => void): void {
-    this.http.get(this.proxyurl + this.baseUrl + this.deckId + '/draw/?count=1', { headers: this.headers}).subscribe(json => {
+    this.http.get(this.baseUrl + this.deckId + '/draw/?count=1').subscribe(json => {
       for (const key in json) {
         if (key === 'cards') {
           this.card = json[key][0];
@@ -66,7 +66,7 @@ export class CardsService {
   }
 
   shuffleDeck(): void {
-    this.http.get(this.proxyurl + this.baseUrl + this.deckId + '/shuffle/', { headers: this.headers}).subscribe(json => {
+    this.http.get(this.baseUrl + this.deckId + '/shuffle/').subscribe(json => {
       console.log(json);
     });
   }
