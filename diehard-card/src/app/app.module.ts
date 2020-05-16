@@ -15,7 +15,8 @@ import { StatusDialogComponent } from './status-dialog/status-dialog.component';
 
 const appRoutes: Routes = [
   { path: 'play', component: GameComponent },
-  { path: '', component: InstructionsComponent }
+  { path: '', component: InstructionsComponent },
+  { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
