@@ -22,8 +22,6 @@ export class CardsService {
     .set('Access-Control-Allow-Origin', '*');
   }
 
-// : Request header field access-control-allow-origin is not allowed by Access-Control-Allow-Headers in preflight response.
-
   fetchDeck(): void {
     this.http.get('https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1')
     .subscribe(data => {
