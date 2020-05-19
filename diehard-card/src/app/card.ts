@@ -1,6 +1,6 @@
 export interface Card {
-  image : string
-  value : string
-  suit : string
-  code : string
+  image: string;
+  value: string;
+  suit: string;
+  code: string;
 }

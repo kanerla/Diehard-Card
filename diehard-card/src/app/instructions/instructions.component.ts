@@ -11,7 +11,7 @@ import { RulesService } from '../rules.service';
   styleUrls: ['./instructions.component.css']
 })
 export class InstructionsComponent implements OnInit {
-  rules = ''
+  rules = '';
   constructor(private rulesService: RulesService) { }
 
   ngOnInit(): void {

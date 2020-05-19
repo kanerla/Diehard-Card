@@ -5,16 +5,16 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class RulesService {
-  private http: HttpClient
+  private http: HttpClient;
 
   constructor(http: HttpClient) {
-    this.http = http
+    this.http = http;
   }
 
-  fetch(callBackFunction: (result: string) => void) : void {
+  fetch(callBackFunction: (result: string) => void): void {
     this.http.get('assets/rulebook.txt', {responseType: 'text'})
     .subscribe(data => {
-      callBackFunction(data)
+      callBackFunction(data);
     });
   }
 }
