@@ -30,7 +30,7 @@ import { StatusDialogComponent } from '../status-dialog/status-dialog.component'
 </table>
 
 <div class="start">
-  <button class="startbutton" mat-raised-button color="primary" (click)="drawCards()" [disabled]="gameStarted">{{buttonText}}</button>
+  <button class="startbutton" mat-raised-button color="primary" (click)="startGame()" [disabled]="gameStarted">{{buttonText}}</button>
 </div>
 
 <div class="bottom" *ngIf="gameStarted">
@@ -45,22 +45,18 @@ import { StatusDialogComponent } from '../status-dialog/status-dialog.component'
 })
 export class GameComponent implements OnInit {
   gameStarted = false;
-  imageFetched = false;
   buttonText = 'Start game';
   topFull = false;
   middleFull = false;
   bottomFull = false;
-  allFull = false;
   card: Card;
-  cards: Card[] = [];
   top: Card[] = [];
   middle: Card[] = [];
   bottom: Card[] = [];
-  index;
   highscores: number[] = [];
 
   constructor(private cardsService: CardsService, public dialog: MatDialog) {
-    this.index = 0;
+
   }
 
   ngOnInit(): void {
@@ -68,28 +64,19 @@ export class GameComponent implements OnInit {
   }
 
   drawCard(): void {
-    /*
-    this.card = this.cards[this.index];
-    this.index ++;
-    */
     this.cardsService.drawCard((result) => {
      this.card = result;
     });
     this.gameStarted = true;
   }
 
-  drawCards(): void {
+  startGame(): void {
     this.top = [];
     this.middle = [];
     this.bottom = [];
     this.topFull = false;
     this.middleFull = false;
     this.bottomFull = false;
-    this.allFull = false;
-    this.cardsService.drawCards((result) => {
-      this.cards = result;
-    });
-    this.gameStarted = true;
     this.drawCard();
   }
 
@@ -100,7 +87,7 @@ export class GameComponent implements OnInit {
       if (this.top.length === 3) {
         this.topFull = true;
       }
-      console.log(this.gameOver());
+      this.gameOver();
     }
   }
 
@@ -111,7 +98,7 @@ export class GameComponent implements OnInit {
       if (this.middle.length === 5) {
         this.middleFull = true;
       }
-      console.log(this.gameOver());
+      this.gameOver();
     }
   }
 
@@ -122,27 +109,13 @@ export class GameComponent implements OnInit {
       if (this.bottom.length === 5) {
         this.bottomFull = true;
       }
-      console.log(this.gameOver());
+      this.gameOver();
     }
   }
 
-  gameOver(): boolean {
+  gameOver(): void {
     if (this.bottomFull && this.topFull && this.middleFull) {
-      console.log('Game over!');
       this.compareHands(this.getTopHand(this.top), this.getHand(this.middle), this.getHand(this.bottom));
-      /*
-      console.log('top:');
-      this.getHand(this.top);
-
-      console.log('middle:');
-      this.getHand(this.middle);
-
-      console.log('bottom:');
-      this.getHand(this.bottom);
-      */
-      return true;
-    } else {
-      return false;
     }
   }
 
@@ -152,8 +125,8 @@ export class GameComponent implements OnInit {
 
   checkForFlush(row: Card[]): boolean {
     const suits = [];
-    for (let i = 0; i < row.length; i++) {
-        suits.push(row[i].suit);
+    for (let card of row) {
+      suits.push(card.suit);
     }
     return this.allEqual( suits );
   }
@@ -184,22 +157,19 @@ export class GameComponent implements OnInit {
     let current = null;
     let count = 0;
 
-    for (let i = 0; i < sorted.length; i++) {
-      if (sorted[i] !== current) {
-          if (count === 3) {
-              console.log(current + ' comes --> ' + count + ' times');
-              return true;
-          }
-          current = sorted[i];
-          count = 1;
+    for (let card of sorted) {
+      if (card !== current) {
+        if (count === 3) {
+          return true;
+        }
+        current = card;
+        count = 1;
       } else {
-          count++;
+        count++;
       }
     }
-    // useless?
     if (count === 3) {
-        console.log(current + ' comes --> ' + count + ' times');
-        return true;
+      return true;
     }
     return false;
   }
@@ -209,22 +179,19 @@ export class GameComponent implements OnInit {
     let current = null;
     let count = 0;
 
-    for (let i = 0; i < sorted.length; i++) {
-      if (sorted[i] !== current) {
-          if (count === 4) {
-              console.log(current + ' comes --> ' + count + ' times');
-              return true;
-          }
-          current = sorted[i];
-          count = 1;
+    for (let card of sorted) {
+      if (card !== current) {
+        if (count === 4) {
+          return true;
+        }
+        current = card;
+        count = 1;
       } else {
-          count++;
+        count++;
       }
     }
-    // useless?
     if (count === 4) {
-        console.log(current + ' comes --> ' + count + ' times');
-        return true;
+      return true;
     }
     return false;
   }
@@ -235,16 +202,16 @@ export class GameComponent implements OnInit {
     let count = 0;
     let pairs = 0;
 
-    for (let i = 0; i < sorted.length; i++) {
-      if (sorted[i] !== current) {
-          if (count === 2) {
-              pairs ++;
-              count = 0;
-          }
-          current = sorted[i];
-          count = 1;
+    for (let card of sorted) {
+      if (card !== current) {
+        if (count === 2) {
+          pairs ++;
+          count = 0;
+        }
+        current = card;
+        count = 1;
       } else {
-          count++;
+        count++;
       }
     }
     if (count === 2) {
@@ -257,17 +224,17 @@ export class GameComponent implements OnInit {
 
   sortValues(row: Card[]): number[] {
     const values = [];
-    for (let i = 0; i < row.length; i++) {
-      if (row[i].value === 'JACK') {
+    for (let card of row) {
+      if (card.value === 'JACK') {
         values.push(11);
-      } else if (row[i].value === 'QUEEN') {
+      } else if (card.value === 'QUEEN') {
         values.push(12);
-      } else if (row[i].value === 'KING') {
+      } else if (card.value === 'KING') {
         values.push(13);
-      } else if (row[i].value === 'ACE') {
+      } else if (card.value === 'ACE') {
         values.push(14);
       } else {
-        values.push(Number(row[i].value));
+        values.push(Number(card.value));
       }
     }
 
@@ -412,13 +379,12 @@ export class GameComponent implements OnInit {
       }
 
       this.highscores.push(score);
-      console.log(this.highscores.length);
       console.log('WON');
       this.openDialog(true, score);
     }
   }
 
-  openDialog(won, score): void {
+  openDialog(won: boolean, score: number): void {
     const sorted = this.highscores.sort((n1, n2) => n2 - n1);
     const dialogRef = this.dialog.open(StatusDialogComponent, {
       height: '275px',
@@ -428,12 +394,11 @@ export class GameComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => {
       this.gameStarted = false;
       this.buttonText = 'Play again';
-     // location.reload();
       this.cardsService.shuffleDeck();
     });
   }
 
-  notDouble(card): boolean {
+  notDouble(card: Card): boolean {
     if (this.top.includes(card)) {
       return false;
     } else if (this.middle.includes(card)) {
